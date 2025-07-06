@@ -3,11 +3,6 @@ import pandas as pd
 from pathlib import Path
 
 def load_data():
-    """
-    Load and preprocess SDSS data from Kaggle with fallback options
-    Returns:
-        pd.DataFrame: Processed SDSS galaxy data with morphology, redshift, and AGN features
-    """
     try:
         # Attempt new KaggleHub API syntax first
         try:
@@ -44,7 +39,7 @@ def load_data():
         return df.dropna()
 
     except Exception as e:
-        print(f"❌ Data loading failed: {str(e)}")
+        print(f"Data loading failed: {str(e)}")
         print("\nTroubleshooting steps:")
         print("1. Verify kagglehub installation: !pip show kagglehub")
         print("2. Check authentication: !kagglehub configure")
