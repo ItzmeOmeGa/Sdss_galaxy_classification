@@ -4,7 +4,7 @@ from pathlib import Path
 
 def load_data():
     try:
-        # Attempt new KaggleHub API syntax first
+        df = None
         try:
             df_path = kagglehub.model_download(
                 'bryancimo/sdss-galaxy-classification-dr18',
@@ -39,7 +39,7 @@ def load_data():
         return df.dropna()
 
     except Exception as e:
-        print(f"Data loading failed: {str(e)}")
+        print(f"❌ Data loading failed: {str(e)}")
         print("\nTroubleshooting steps:")
         print("1. Verify kagglehub installation: !pip show kagglehub")
         print("2. Check authentication: !kagglehub configure")
