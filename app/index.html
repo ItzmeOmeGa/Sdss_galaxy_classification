@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SDSS Galaxy Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .result-card { transition: all 0.3s; }
+        .result-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4">SDSS Galaxy Classifier</h1>
+            <p class="lead">Classify morphology, estimate redshift, and detect AGN</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <form method="POST">
+                            <h4 class="mb-4">Enter Photometric Data</h4>
+                            <div class="row g-3">
+                                {% for band in ['u', 'g', 'r', 'i', 'z'] %}
+                                <div class="col-md">
+                                    <label class="form-label">{{ band|upper }}-band magnitude</label>
+                                    <input type="number" step="0.001" class="form-control" name="{{ band }}" required>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-4 px-4 py-2">
+                                Analyze Galaxy
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {% if results %}
+                <div class="mt-5">
+                    <h4 class="mb-4">Analysis Results</h4>
+                    <div class="row g-4">
+                        <!-- Morphology Card -->
+                        <div class="col-md-4">
+                            <div class="card result-card h-100 border-primary">
+                                <div class="card-body text-center">
+                                    <h5>Morphology</h5>
+                                    <div class="display-6 my-3 text-primary">
+                                        {{ results.morphology }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Redshift Card -->
+                        <div class="col-md-4">
+                            <div class="card result-card h-100 border-success">
+                                <div class="card-body text-center">
+                                    <h5>Redshift (z)</h5>
+                                    <div class="display-6 my-3 text-success">
+                                        {% if results.redshift %}{{ results.redshift }}{% else %}N/A{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AGN Card -->
+                        <div class="col-md-4">
+                            <div class="card result-card h-100 border-danger">
+                                <div class="card-body text-center">
+                                    <h5>AGN</h5>
+                                    <div class="display-6 my-3 text-danger">
+                                        {% if results.is_agn is not none %}
+                                            {{ 'Yes' if results.is_agn else 'No' }}
+                                        {% else %}N/A{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
